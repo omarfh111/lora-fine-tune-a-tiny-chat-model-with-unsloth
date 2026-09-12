@@ -166,8 +166,29 @@ def build_sft_trainer(model, tokenizer, dataset, training_args, max_seq_length=2
     )
     return trainer
 
-# Step 17 - run_sft_training (not yet solved)
-# TODO: implement
+# Step 17 - run_sft_training
+from trl import SFTTrainer
+from transformers import TrainingArguments
+from unsloth import FastLanguageModel
+import torch
+
+def build_training_arguments(max_steps=5):
+    bf16_supported = torch.cuda.is_bf16_supported()
+
+    return TrainingArguments(
+        output_dir="./outputs",
+        per_device_train_batch_size=1,
+        max_steps=max_steps,
+        logging_steps=1,
+        bf16=bf16_supported,
+        fp16=not bf16_supported,
+        save_strategy="no",
+    )
+def run_sft_training(trainer):
+    """Run a few SFT steps and return the final training loss as a float."""
+    # TODO: drive the trainer through its short optimization run and return the final loss
+    result = trainer.train()
+    return result.training_loss
 
 # Step 18 - switch_to_inference_mode (not yet solved)
 # TODO: implement
